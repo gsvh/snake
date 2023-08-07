@@ -16,7 +16,8 @@ let interval
 // DOM Elements
 const gameBoard = document.getElementById('game-board')
 const scoreDisplay = document.getElementById('score')
-const highScoreDisplay = document.getElementById('highscore')
+const highScoreButton = document.getElementById('highscore')
+// const highScoreContainer = document.getElementById('highscore-container')
 const startButton = document.getElementById('start-button')
 const gameOverMessage = document.getElementById('game-over')
 
@@ -165,6 +166,7 @@ function updateGame() {
     if (score > highScore) {
       highScore = score
       localStorage.setItem('highScore', highScore)
+      updateHighScoreDisplay()
     }
 
     // Display the Game Over message and score
@@ -183,7 +185,31 @@ function loadHighScore() {
   const storedHighScore = localStorage.getItem('highScore')
   if (storedHighScore) {
     highScore = parseInt(storedHighScore)
-    highScoreDisplay.textContent = `High Score: ${highScore}`
+    updateHighScoreDisplay()
+  }
+}
+
+function copyHighScore(score, link) {
+  const highScoreString = `Beat my SNEK high score:\n 🐍 ${score} 🐍\n${link}`
+
+  ;(async () => {
+    await copyToClipboard(highScoreString)
+    alert('Copied high score! 🐍')
+  })()
+}
+
+// Function to update the high score display
+function updateHighScoreDisplay() {
+  highScoreButton.textContent = `🐍 High Score: ${highScore}`
+}
+
+// Function to copy the high score to the clipboard
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text)
+    console.log('Content copied to clipboard')
+  } catch (err) {
+    console.error('Failed to copy: ', err)
   }
 }
 
@@ -201,4 +227,8 @@ function startGame() {
 
 createGameBoard()
 loadHighScore()
+
 startButton.addEventListener('click', startGame)
+highScoreButton.addEventListener('click', () =>
+  copyHighScore(highScore, 'https://snake-04md.onrender.com')
+)
