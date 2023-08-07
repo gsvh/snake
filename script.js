@@ -230,5 +230,5 @@ loadHighScore()
 
 startButton.addEventListener('click', startGame)
 highScoreButton.addEventListener('click', () =>
-  copyHighScore(highScore, 'https://snake-04md.onrender.com')
+  copyHighScore(highScore, 'https://sssssnek.onrender.com/')
 )
