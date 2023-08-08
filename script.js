@@ -24,8 +24,19 @@ const darkModeToggle = document.getElementById('dark-mode-toggle')
 const overlay = document.getElementById('overlay')
 
 // Dark mode toggle
+// Load user preference from storage
+const isDarkMode = localStorage.getItem('darkMode') === 'true'
+if (isDarkMode) {
+  gameContainer.classList.add('dark-mode')
+}
+
 darkModeToggle.addEventListener('click', () => {
   gameContainer.classList.toggle('dark-mode')
+  // Save user preference to storage
+  const currentMode = gameContainer.classList.contains('dark-mode')
+    ? 'true'
+    : 'false'
+  localStorage.setItem('darkMode', currentMode)
 })
 
 // Function to create and update the game board
