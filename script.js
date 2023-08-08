@@ -17,9 +17,16 @@ let interval
 const gameBoard = document.getElementById('game-board')
 const scoreDisplay = document.getElementById('score')
 const highScoreButton = document.getElementById('highscore')
-// const highScoreContainer = document.getElementById('highscore-container')
 const startButton = document.getElementById('start-button')
 const gameOverMessage = document.getElementById('game-over')
+const gameContainer = document.querySelector('.game-container')
+const darkModeToggle = document.getElementById('dark-mode-toggle')
+const overlay = document.getElementById('overlay')
+
+// Dark mode toggle
+darkModeToggle.addEventListener('click', () => {
+  gameContainer.classList.toggle('dark-mode')
+})
 
 // Function to create and update the game board
 function createGameBoard() {
@@ -152,6 +159,7 @@ document.addEventListener('keydown', (event) => {
 function resetGame() {
   loadHighScore()
   gameOverMessage.style.display = 'none'
+  overlay.style.display = 'none'
   snake = [{ x: 10, y: 10 }]
   direction = 'right'
   isGameOver = false
@@ -170,10 +178,13 @@ function updateGame() {
     }
 
     // Display the Game Over message and score
-    gameOverMessage.textContent = `Game Over! Your score: ${score}`
+    gameOverMessage.textContent = `Game Over!\nYour score: ${score}`
     gameOverMessage.style.display = 'block'
     startButton.style.display = 'block'
     startButton.textContent = 'Try again'
+
+    // Show the overlay to blur the game board
+    overlay.style.display = 'block'
     return
   }
   drawSnake()

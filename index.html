@@ -8,16 +8,20 @@
   </head>
   <body>
     <div class="game-container">
-      <div class="heading">
+      <div class="title">
         <h1>🐍 SNEK 🐍</h1>
       </div>
-      <div class="game-board" id="game-board">
-        <!-- Snake cells will be dynamically created here -->
+      <div class="overlay-container">
+        <div class="game-board" id="game-board">
+          <!-- Snake cells will be dynamically created here -->
+        </div>
+        <div class="overlay" id="overlay"></div>
       </div>
-      <button id="start-button" class="start-button">Start Game</button>
-      <div class="game-over" id="game-over">Game Over</div>
+      <button id="start-button" class="start button">Start Game</button>
+      <div class="game-over" id="game-over"><p>Game Over</p></div>
       <div class="score" id="score">Score: 0</div>
-      <button class="score" id="highscore">🐍 High Score: 0</button>
+      <button id="highscore">🐍 High Score: 0</button>
+      <button id="dark-mode-toggle">Toggle Dark Mode</button>
     </div>
 
     <script src="script.js"></script>
