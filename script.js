@@ -8,15 +8,17 @@ const FOOD_SCORE = 10
 let highScore = 0
 let snake = [{ x: 5, y: 10 }]
 let direction = 'right'
+let lastDirection = 'right'
 let isGameOver = false
 let score = 0
 let food
-let interval
+let timeout
 
 // DOM Elements
 const gameBoard = document.getElementById('game-board')
 const scoreDisplay = document.getElementById('score')
-const highScoreButton = document.getElementById('highscore')
+const highScoreButton = document.getElementById('highscore-button')
+const highScoreLabel = document.getElementById('highscore')
 const startButton = document.getElementById('start-button')
 const gameOverMessage = document.getElementById('game-over')
 const gameContainer = document.querySelector('.game-container')
@@ -30,7 +32,7 @@ if (isDarkMode) {
   gameContainer.classList.add('dark-mode')
 }
 
-darkModeToggle.addEventListener('click', () => {
+darkModeToggle.addEventListener('change', () => {
   gameContainer.classList.toggle('dark-mode')
   // Save user preference to storage
   const currentMode = gameContainer.classList.contains('dark-mode')
@@ -105,6 +107,8 @@ function moveSnake() {
       break
   }
 
+  lastDirection = direction
+
   // Check for collisions with the boundaries and the snake's body
   const isColliding = checkCollisions(newHead)
 
@@ -164,6 +168,10 @@ document.addEventListener('keydown', (event) => {
       if (direction !== 'left') direction = 'right'
       break
   }
+
+  if (direction != lastDirection) {
+    updateGame()
+  }
 })
 
 // Function to reset the game
@@ -178,9 +186,10 @@ function resetGame() {
 }
 
 function updateGame() {
-  if (isGameOver && interval) {
-    clearInterval(interval)
-
+  if (timeout) {
+    clearTimeout(timeout)
+  }
+  if (isGameOver) {
     // Set high score
     if (score > highScore) {
       highScore = score
@@ -201,6 +210,7 @@ function updateGame() {
   drawSnake()
   moveSnake()
   scoreDisplay.textContent = 'Score: ' + score
+  timeout = setTimeout(updateGame, SPEED)
 }
 
 function loadHighScore() {
@@ -222,7 +232,7 @@ function copyHighScore(score, link) {
 
 // Function to update the high score display
 function updateHighScoreDisplay() {
-  highScoreButton.textContent = `🐍 High Score: ${highScore}`
+  highScoreLabel.textContent = `High score: ${highScore}`
 }
 
 // Function to copy the high score to the clipboard
@@ -244,7 +254,7 @@ function startGame() {
   // Hide the Start Game button when the game starts
   startButton.style.display = 'none'
   generateFood()
-  interval = setInterval(updateGame, SPEED)
+  updateGame()
 }
 
 createGameBoard()
