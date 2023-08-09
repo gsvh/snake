@@ -16,7 +16,6 @@ body {
   transition: background 0.2s linear;
 }
 .title {
-  width: 100%;
   display: flex;
   color: #636363;
   align-items: center;
@@ -40,6 +39,20 @@ body {
 .game-board div {
   width: 20px;
   height: 20px;
+}
+
+@media (max-width: 600px) {
+  .game-container {
+    width: 100vw;
+  }
+  .game-board {
+    display: grid;
+    grid-template-columns: repeat(20, auto);
+  }
+  .game-board div {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 /* Style the overlay */

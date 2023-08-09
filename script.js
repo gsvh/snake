@@ -1,6 +1,5 @@
 // Constants
 const BOARD_SIZE = 20
-const CELL_SIZE = 20
 const SPEED = 150 // Milliseconds between each move
 const FOOD_SCORE = 10
 
@@ -21,6 +20,7 @@ const highScoreButton = document.getElementById('highscore-button')
 const highScoreLabel = document.getElementById('highscore')
 const startButton = document.getElementById('start-button')
 const gameOverMessage = document.getElementById('game-over')
+const body = document.querySelector('body')
 const gameContainer = document.querySelector('.game-container')
 const darkModeToggle = document.getElementById('dark-mode-toggle')
 const overlay = document.getElementById('overlay')
@@ -29,25 +29,67 @@ const overlay = document.getElementById('overlay')
 // Load user preference from storage
 const isDarkMode = localStorage.getItem('darkMode') === 'true'
 if (isDarkMode) {
-  gameContainer.classList.add('dark-mode')
+  body.classList.add('dark-mode')
 }
 
 darkModeToggle.addEventListener('change', () => {
-  gameContainer.classList.toggle('dark-mode')
+  body.classList.toggle('dark-mode')
   // Save user preference to storage
-  const currentMode = gameContainer.classList.contains('dark-mode')
-    ? 'true'
-    : 'false'
+  const currentMode = body.classList.contains('dark-mode') ? 'true' : 'false'
   localStorage.setItem('darkMode', currentMode)
 })
+
+// Function to handle touch events for mobile controls
+function handleTouchControls() {
+  const gameContainer = document.querySelector('.game-board')
+  let startX, startY
+
+  gameContainer.addEventListener('touchstart', (event) => {
+    startX = event.touches[0].clientX
+    startY = event.touches[0].clientY
+  })
+
+  gameContainer.addEventListener('touchmove', (event) => {
+    if (!startX || !startY) return
+
+    const deltaX = event.touches[0].clientX - startX
+    const deltaY = event.touches[0].clientY - startY
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (deltaX > 0) {
+        // Right swipe
+        direction = 'right'
+      } else {
+        // Left swipe
+        direction = 'left'
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0) {
+        // Down swipe
+        direction = 'down'
+      } else {
+        // Up swipe
+        direction = 'up'
+      }
+    }
+
+    startX = null
+    startY = null
+  })
+}
+
+// Check if the user is on a mobile device
+if (window.innerWidth <= 600) {
+  handleTouchControls() // Enable touch controls for mobile devices
+}
 
 // Function to create and update the game board
 function createGameBoard() {
   for (let row = 0; row < BOARD_SIZE; row++) {
     for (let col = 0; col < BOARD_SIZE; col++) {
       const cell = document.createElement('div')
-      cell.style.width = CELL_SIZE + 'px'
-      cell.style.height = CELL_SIZE + 'px'
       gameBoard.appendChild(cell)
     }
   }
